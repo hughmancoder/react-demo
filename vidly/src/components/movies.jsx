@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Like from "./like";
 import Pagination from "./pagination";
-import ListGroup  from "./listGroup";
+import ListGroup from "./listGroup";
 
 import { getMovies } from "../services/fakeMovieService";
 import { getGenres } from "../services/fakeGenreService";
@@ -16,7 +16,8 @@ class Movies extends Component {
   };
 
   componentDidMount() {
-    this.setState({movies: getMovies(), genres: getGenres()});
+    const genres = [{ name: 'All Genres' }, ...getGenres()]
+    this.setState({ movies: getMovies(), genres });
   }
 
   handleDelete = (movie) => {
@@ -25,7 +26,8 @@ class Movies extends Component {
   };
 
   handleGenresSelect = genre => {
-    console.log(genre);
+    // update state of selected Genre
+    this.setState({ selectedGenre: genre });
   };
 
   handleLike = (movie) => {
@@ -37,31 +39,34 @@ class Movies extends Component {
   };
 
   handlePageChange = (page) => {
-    console.log("page changed to ", page);
+    // console.log("page changed to ", page);
     this.setState({ currentPage: page });
   };
 
   render() {
     const { length: count } = this.state.movies;
-    const { pageSize, currentPage, movies: allMovies } = this.state;
-    console.log("movies current page", currentPage);
-
+    const { pageSize, currentPage, movies: allMovies, selectedGenre } = this.state;
+    // console.log("movies current page", currentPage);
     if (count === 0) return <p>There are no movies in the database.</p>;
 
-    const movies = paginate(allMovies, currentPage, pageSize);
+
+    const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(movie => movie.genre._id === selectedGenre._id) : allMovies;
+    const movies = paginate(filtered, currentPage, pageSize);
+    // console.log("selected genre", selectedGenre, "movies", allMovies);
 
     return (
       <div className="row">
         <div className="col-3">
           <ListGroup
-            genres = {this.state.genres}
-            onItemSelect = {this.handleGenresSelect}
-            valueProperty = "_id"
-            textProperty = "name"
+            items={this.state.genres}
+            onItemSelect={this.handleGenresSelect}
+            selectedItem={this.state.selectedGenre}
+            valueProperty="_id"
+            textProperty="name"
           />
         </div>
         <div className="col">
-        <p>Showing {count} movies in the database.</p>
+          <p>Showing {movies.length} movies in the database.</p>
           <table className="table">
             <thead>
               <tr>
@@ -98,15 +103,15 @@ class Movies extends Component {
               ))}
             </tbody>
           </table>
-        </div>
 
-        <Pagination
-          onPageChange={this.handlePageChange}
-          currentPage={currentPage}
-          // this.state.movies.length is destructured to count
-          itemsCount={count}
-          pageSize={pageSize}
-        />
+          <p> page component </p>
+          <Pagination
+            itemsCount={movies.length}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            onPageChange={this.handlePageChange}
+          />
+        </div>
       </div>
     );
   }
