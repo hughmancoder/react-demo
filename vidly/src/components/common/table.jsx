@@ -2,7 +2,6 @@ import React from "react";
 import TableHeader from "./tableHeader";
 import TableBody from "./tableBody";
 
-// desturcture props object into react component
 const Table = ({ columns, sortColumn, onSort, data }) => {
   return (
     <table className="table">
