@@ -123,7 +123,7 @@ class Movies extends Component {
             onPageChange={this.handlePageChange}
           />
         </div>
-      </div>
+       </div>
     );
   }
 }

@@ -7,7 +7,7 @@ const NavBar = () => {
       <Link className="navbar-brand" to="/">
         Vidly
       </Link>
-      <button
+       <button
         className="navbar-toggler"
         type="button"
         data-toggle="collapse"

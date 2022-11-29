@@ -2,6 +2,15 @@ import React from "react";
 import Joi from "joi-browser";
 import Form from "./common/form";
 
+
+
+/*
+steps to use clas form
+1) set state for form
+2) define the schema for that form
+
+*/
+
 class LoginForm extends Form {
   state = {
     data: { username: "", password: "" },

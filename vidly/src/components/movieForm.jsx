@@ -36,6 +36,7 @@ class MovieForm extends Form {
       .label("Daily Rental Rate")
   };
 
+  // called after component is rendered
   componentDidMount() {
     const genres = getGenres();
     this.setState({ genres });
